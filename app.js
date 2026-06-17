@@ -4,7 +4,7 @@
    credenciais do seu projeto Supabase.
    ========================================== */
 const SUPABASE_URL  = 'https://hzwwsbgppdbihyxvdxrn.supabase.co';
-const SUPABASE_KEY  = 'sb_publishable_JsIhkEk0PkJuBFJfIr94IA_dSpN6HHN';
+const SUPABASE_KEY  = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh6d3dzYmdwcGRiaWh5eHZkeHJuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE2NDU0MDUsImV4cCI6MjA5NzIyMTQwNX0.ggzeIB9eN3cZEq5fkn0fcqeqdRpf58FUQP9xeyT-3Yg';
 
 /* ==========================================
    SUPABASE — REST API direta (sem SDK)
