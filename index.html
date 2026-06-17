@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eurotrip Jane 60 — 2026</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- Supabase SDK via CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+</head>
+<body>
+
+<!-- Sync Indicator -->
+<div id="sync-indicator" class="sync-indicator synced">
+  <span class="sync-dot"></span>
+  <span id="sync-text">Sincronizado</span>
+</div>
+
+<!-- ==========================================
+     HERO HEADER
+     ========================================== -->
+<header class="hero">
+  <div class="hero-inner">
+    <!-- Left: Text -->
+    <div class="hero-left">
+      <p class="hero-eyebrow">Uma viagem especial</p>
+      <h1 class="hero-title">Eurotrip</h1>
+      <p class="hero-subtitle">Jane · 60 anos</p>
+      <p class="hero-dates">18 SET — 03 OUT 2026</p>
+      <p class="hero-cities">Paris · Zurique · Milão · Veneza · Roma</p>
+    </div>
+
+    <!-- Right: Europe Map SVG -->
+    <div class="hero-right">
+      <svg class="euro-map" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <defs>
+          <pattern id="mapgrid" width="20" height="20" patternUnits="userSpaceOnUse">
+            <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#D4B483" stroke-width="0.3"/>
+          </pattern>
+          <marker id="arrowhead" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+            <circle cx="3" cy="3" r="2" fill="#B8965A" opacity="0.7"/>
+          </marker>
+        </defs>
+
+        <!-- Grid background -->
+        <rect width="400" height="300" fill="url(#mapgrid)" opacity="0.5"/>
+
+        <!-- Simplified Western Europe landmass -->
+        <path d="
+          M 62,32 C 52,46 44,68 48,90 C 52,112 42,122 36,138
+          C 30,154 36,170 52,174 C 68,178 84,168 92,154
+          C 100,140 96,122 104,112 C 112,100 128,98 140,102
+          C 154,108 160,122 172,118 C 184,114 190,102 204,106
+          C 218,112 222,130 234,130 C 246,130 256,120 258,108
+          C 262,94 252,78 248,64 C 244,50 244,38 250,28
+          C 256,18 264,14 260,6
+          C 254,-2 238,-2 224,4
+          C 210,10 204,22 190,18
+          C 176,14 164,6 150,8
+          C 136,10 122,22 108,18
+          C 94,14 78,24 64,32 Z
+        " fill="#EDE6D8" stroke="#C8B08A" stroke-width="1.2" opacity="0.85"/>
+
+        <!-- Italy boot (more recognizable) -->
+        <path d="
+          M 204,106 C 210,120 214,134 222,142 C 230,150 240,154 246,164
+          C 254,176 256,192 256,208 C 256,224 250,238 242,250
+          C 236,260 226,266 218,272 C 212,276 207,278 204,274
+          C 200,270 202,262 207,252 C 212,242 218,232 220,220
+          C 222,208 218,196 213,184 C 208,172 204,160 200,148
+          C 196,136 194,122 196,112 Z
+        " fill="#EDE6D8" stroke="#C8B08A" stroke-width="1.2" opacity="0.85"/>
+
+        <!-- Britain (optional, distant) -->
+        <path d="M 55,22 C 50,28 46,38 50,46 C 54,54 60,54 64,50 C 68,46 68,36 64,28 C 60,20 55,22 55,22 Z"
+          fill="#EDE6D8" stroke="#C8B08A" stroke-width="0.8" opacity="0.5"/>
+
+        <!-- Animated dotted route between cities -->
+        <!-- Paris(120,76) → Zurique(190,96) → Milano(204,118) → Venezia(228,116) → Roma(224,166) -->
+        <path d="M 120,76 C 155,86 178,90 190,96 L 204,118 L 228,116 C 228,138 226,152 224,166"
+          fill="none" stroke="#B8965A" stroke-width="2"
+          stroke-dasharray="7,5" stroke-linecap="round" opacity="0.9">
+          <animate attributeName="stroke-dashoffset" from="0" to="-48" dur="1.8s" repeatCount="indefinite"/>
+        </path>
+
+        <!-- PARIS -->
+        <circle cx="120" cy="76" r="6" fill="#B8965A" stroke="#F7F3EC" stroke-width="2.5"/>
+        <circle cx="120" cy="76" r="10" fill="none" stroke="#B8965A" stroke-width="1" opacity="0.3"/>
+        <text x="120" y="64" font-family="Lato,sans-serif" font-size="9" fill="#1C2B4A"
+          text-anchor="middle" font-weight="700" letter-spacing="1.5">PARIS</text>
+
+        <!-- ZURIQUE -->
+        <circle cx="190" cy="96" r="6" fill="#B8965A" stroke="#F7F3EC" stroke-width="2.5"/>
+        <circle cx="190" cy="96" r="10" fill="none" stroke="#B8965A" stroke-width="1" opacity="0.3"/>
+        <text x="190" y="84" font-family="Lato,sans-serif" font-size="9" fill="#1C2B4A"
+          text-anchor="middle" font-weight="700" letter-spacing="1.5">ZURIQUE</text>
+
+        <!-- MILÃO -->
+        <circle cx="204" cy="118" r="6" fill="#B8965A" stroke="#F7F3EC" stroke-width="2.5"/>
+        <text x="215" y="114" font-family="Lato,sans-serif" font-size="9" fill="#1C2B4A"
+          text-anchor="start" font-weight="700" letter-spacing="1.5">MILÃO</text>
+
+        <!-- VENEZA -->
+        <circle cx="228" cy="116" r="6" fill="#B8965A" stroke="#F7F3EC" stroke-width="2.5"/>
+        <text x="239" y="112" font-family="Lato,sans-serif" font-size="9" fill="#1C2B4A"
+          text-anchor="start" font-weight="700" letter-spacing="1.5">VENEZA</text>
+
+        <!-- ROMA -->
+        <circle cx="224" cy="166" r="6" fill="#1C2B4A" stroke="#F7F3EC" stroke-width="2.5"/>
+        <circle cx="224" cy="166" r="10" fill="none" stroke="#1C2B4A" stroke-width="1" opacity="0.3"/>
+        <text x="235" y="162" font-family="Lato,sans-serif" font-size="9" fill="#1C2B4A"
+          text-anchor="start" font-weight="700" letter-spacing="1.5">ROMA</text>
+
+        <!-- Compass Rose -->
+        <g transform="translate(362, 48)">
+          <circle cx="0" cy="0" r="18" fill="none" stroke="#D4B483" stroke-width="1" opacity="0.5"/>
+          <line x1="0" y1="-14" x2="0" y2="14" stroke="#D4B483" stroke-width="1" opacity="0.6"/>
+          <line x1="-14" y1="0" x2="14" y2="0" stroke="#D4B483" stroke-width="1" opacity="0.6"/>
+          <line x1="-10" y1="-10" x2="10" y2="10" stroke="#D4B483" stroke-width="0.5" opacity="0.35"/>
+          <line x1="10" y1="-10" x2="-10" y2="10" stroke="#D4B483" stroke-width="0.5" opacity="0.35"/>
+          <!-- North arrow -->
+          <polygon points="0,-14 -3,-5 0,-8 3,-5" fill="#B8965A" opacity="0.9"/>
+          <polygon points="0,14 -3,5 0,8 3,5" fill="#D4B483" opacity="0.4"/>
+          <text x="0" y="-19" font-family="Lato,sans-serif" font-size="7" fill="#B8965A"
+            text-anchor="middle" font-weight="700">N</text>
+        </g>
+
+        <!-- Decorative dots along route area -->
+        <circle cx="155" cy="83" r="2" fill="#D4B483" opacity="0.4"/>
+        <circle cx="197" cy="107" r="2" fill="#D4B483" opacity="0.4"/>
+        <circle cx="215" cy="140" r="2" fill="#D4B483" opacity="0.4"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- Monument silhouettes -->
+  <div class="monuments-bar">
+    <svg class="monuments-svg" viewBox="0 0 900 70" xmlns="http://www.w3.org/2000/svg"
+      preserveAspectRatio="xMidYMax meet" aria-hidden="true">
+
+      <!-- Eiffel Tower -->
+      <g transform="translate(180, 65)" opacity="0.45" stroke="#B8965A" stroke-linecap="round">
+        <line x1="0" y1="-2" x2="0" y2="-15" stroke-width="2"/>
+        <line x1="0" y1="-2" x2="-20" y2="55" stroke-width="1.5"/>
+        <line x1="0" y1="-2" x2="20" y2="55" stroke-width="1.5"/>
+        <line x1="-7" y1="14" x2="7" y2="14" stroke-width="1.5"/>
+        <line x1="-13" y1="31" x2="13" y2="31" stroke-width="1.5"/>
+        <line x1="-17" y1="44" x2="17" y2="44" stroke-width="1.5"/>
+        <path d="M -4,14 Q -6,24 -8,31" fill="none" stroke-width="1"/>
+        <path d="M 4,14 Q 6,24 8,31" fill="none" stroke-width="1"/>
+      </g>
+
+      <!-- Duomo di Milano -->
+      <g transform="translate(450, 65)" opacity="0.45" stroke="#B8965A" stroke-linecap="round">
+        <!-- Base facade -->
+        <rect x="-28" y="0" width="56" height="28" fill="none" stroke-width="1.5"/>
+        <!-- Central arch -->
+        <path d="M -8,28 L -8,12 Q 0,4 8,12 L 8,28" fill="none" stroke-width="1.5"/>
+        <!-- Side arches -->
+        <path d="M -22,28 L -22,16 Q -16,10 -10,16 L -10,28" fill="none" stroke-width="1"/>
+        <path d="M 10,28 L 10,16 Q 16,10 22,16 L 22,28" fill="none" stroke-width="1"/>
+        <!-- Central spire -->
+        <line x1="0" y1="0" x2="0" y2="-30" stroke-width="2"/>
+        <line x1="-3" y1="-18" x2="3" y2="-18" stroke-width="1.5"/>
+        <!-- Side spires -->
+        <line x1="-18" y1="0" x2="-18" y2="-16" stroke-width="1.5"/>
+        <line x1="18" y1="0" x2="18" y2="-16" stroke-width="1.5"/>
+        <line x1="-26" y1="0" x2="-26" y2="-10" stroke-width="1"/>
+        <line x1="26" y1="0" x2="26" y2="-10" stroke-width="1"/>
+      </g>
+
+      <!-- Colosseum -->
+      <g transform="translate(720, 65)" opacity="0.45" stroke="#B8965A" stroke-linecap="round">
+        <!-- Outer ellipse -->
+        <ellipse cx="0" cy="-8" rx="46" ry="28" fill="none" stroke-width="1.5"/>
+        <!-- Inner ellipse -->
+        <ellipse cx="0" cy="-8" rx="32" ry="19" fill="none" stroke-width="1" opacity="0.6"/>
+        <!-- Ground line -->
+        <line x1="-46" y1="20" x2="46" y2="20" stroke-width="1.5"/>
+        <!-- Vertical columns/arches -->
+        <line x1="-38" y1="-36" x2="-38" y2="20" stroke-width="1" opacity="0.7"/>
+        <line x1="-23" y1="-34" x2="-23" y2="20" stroke-width="1" opacity="0.7"/>
+        <line x1="-8" y1="-36" x2="-8" y2="20" stroke-width="1" opacity="0.7"/>
+        <line x1="8" y1="-36" x2="8" y2="20" stroke-width="1" opacity="0.7"/>
+        <line x1="23" y1="-34" x2="23" y2="20" stroke-width="1" opacity="0.7"/>
+        <line x1="38" y1="-36" x2="38" y2="20" stroke-width="1" opacity="0.7"/>
+      </g>
+
+    </svg>
+  </div>
+</header>
+
+<!-- ==========================================
+     COUNTDOWN
+     ========================================== -->
+<section class="countdown-section">
+  <p class="countdown-label">Faltam para o embarque</p>
+  <div class="countdown-grid">
+    <div class="countdown-unit">
+      <span class="countdown-num" id="cd-months">--</span>
+      <span class="countdown-unit-label">meses</span>
+    </div>
+    <span class="countdown-sep">:</span>
+    <div class="countdown-unit">
+      <span class="countdown-num" id="cd-days">--</span>
+      <span class="countdown-unit-label">dias</span>
+    </div>
+    <span class="countdown-sep">:</span>
+    <div class="countdown-unit">
+      <span class="countdown-num" id="cd-hours">--</span>
+      <span class="countdown-unit-label">horas</span>
+    </div>
+    <span class="countdown-sep">:</span>
+    <div class="countdown-unit">
+      <span class="countdown-num" id="cd-mins">--</span>
+      <span class="countdown-unit-label">min</span>
+    </div>
+    <span class="countdown-sep">:</span>
+    <div class="countdown-unit">
+      <span class="countdown-num" id="cd-secs">--</span>
+      <span class="countdown-unit-label">seg</span>
+    </div>
+  </div>
+  <p class="departure-note">Partida: 18 de setembro de 2026 · Paris Charles de Gaulle</p>
+</section>
+
+<!-- ==========================================
+     NAV TABS
+     ========================================== -->
+<nav class="nav-tabs" role="tablist">
+  <button class="tab-btn active" onclick="showTab('resumo',this)">Resumo</button>
+  <button class="tab-btn" onclick="showTab('paris',this)">Paris</button>
+  <button class="tab-btn" onclick="showTab('zurique',this)">Zurique</button>
+  <button class="tab-btn" onclick="showTab('milao',this)">Milão</button>
+  <button class="tab-btn" onclick="showTab('veneza',this)">Veneza</button>
+  <button class="tab-btn" onclick="showTab('roma',this)">Roma</button>
+  <button class="tab-btn" onclick="showTab('trens',this)">Trens e Ingressos</button>
+  <button class="tab-btn" onclick="showTab('checklist',this)">Checklist</button>
+</nav>
+
+<!-- ==========================================
+     CONTENT
+     ========================================== -->
+<main class="content">
+
+  <!-- ==============================
+       RESUMO
+       ============================== -->
+  <div class="tab-panel active" id="tab-resumo">
+
+    <!-- Summary cards -->
+    <div class="summary-grid">
+      <div class="summary-card">
+        <div class="summary-card-city">Paris</div>
+        <div class="summary-card-info">França · 3 noites</div>
+        <div class="summary-card-dates">18 – 21 Set</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-card-city">Zurique</div>
+        <div class="summary-card-info">Suíça · 2 noites</div>
+        <div class="summary-card-dates">21 – 23 Set</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-card-city">Milão</div>
+        <div class="summary-card-info">Itália · 3 noites</div>
+        <div class="summary-card-dates">23 – 26 Set</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-card-city">Veneza</div>
+        <div class="summary-card-info">Itália · 2 noites</div>
+        <div class="summary-card-dates">26 – 28 Set</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-card-city">Roma</div>
+        <div class="summary-card-info">Itália · 4 noites</div>
+        <div class="summary-card-dates">28 Set – 03 Out</div>
+      </div>
+    </div>
+
+    <!-- Bernina highlight -->
+    <div class="bernina-highlight">
+      <div class="bh-title">Destaque da viagem — Bernina Express</div>
+      <div class="bh-desc">O trem panorâmico mais espetacular do mundo. Chur → Tirano atravessando os Alpes, 196 pontes, 55 túneis, geleiras e o Passo Bernina a 2.253m. Patrimônio UNESCO. Dia 23 de setembro, saindo de Zurique.</div>
+    </div>
+
+    <!-- Accommodation -->
+    <div class="section-title">Hospedagens</div>
+    <div id="hosp-cards"></div>
+
+  </div>
+
+  <!-- ==============================
+       PARIS
+       ============================== -->
+  <div class="tab-panel" id="tab-paris">
+    <div class="city-header">
+      <div class="city-name">Paris</div>
+      <div class="city-dates">18 – 21 Set · 3 noites · França</div>
+    </div>
+    <div id="paris-days"></div>
+  </div>
+
+  <!-- ==============================
+       ZURIQUE
+       ============================== -->
+  <div class="tab-panel" id="tab-zurique">
+    <div class="city-header">
+      <div class="city-name">Zurique</div>
+      <div class="city-dates">21 – 23 Set · 2 noites · Suíça</div>
+    </div>
+    <div id="zurique-days"></div>
+  </div>
+
+  <!-- ==============================
+       MILÃO
+       ============================== -->
+  <div class="tab-panel" id="tab-milao">
+    <div class="city-header">
+      <div class="city-name">Milão</div>
+      <div class="city-dates">23 – 26 Set · 3 noites · Itália</div>
+    </div>
+    <div id="milao-days"></div>
+  </div>
+
+  <!-- ==============================
+       VENEZA
+       ============================== -->
+  <div class="tab-panel" id="tab-veneza">
+    <div class="city-header">
+      <div class="city-name">Veneza</div>
+      <div class="city-dates">26 – 28 Set · 2 noites · Itália</div>
+    </div>
+    <div id="veneza-days"></div>
+  </div>
+
+  <!-- ==============================
+       ROMA
+       ============================== -->
+  <div class="tab-panel" id="tab-roma">
+    <div class="city-header">
+      <div class="city-name">Roma</div>
+      <div class="city-dates">28 Set – 03 Out · 4 noites · Itália</div>
+    </div>
+    <div id="roma-days"></div>
+  </div>
+
+  <!-- ==============================
+       TRENS E INGRESSOS
+       ============================== -->
+  <div class="tab-panel" id="tab-trens">
+
+    <!-- TRENS -->
+    <div class="section-title">Trens</div>
+    <div id="trens-list"></div>
+
+    <hr class="section-divider">
+
+    <!-- INGRESSOS -->
+    <div class="section-title">Ingressos</div>
+
+    <!-- Add ticket form -->
+    <div class="ticket-add-form">
+      <p class="edit-label" style="margin-bottom:12px;">Adicionar ingresso</p>
+      <div class="ticket-form-grid">
+        <div class="edit-field">
+          <label class="edit-label">Nome do ingresso</label>
+          <input class="edit-input" type="text" id="new-ticket-nome" placeholder="Ex: Coliseu + Foro Romano">
+        </div>
+        <div class="edit-field">
+          <label class="edit-label">Data</label>
+          <input class="edit-input" type="date" id="new-ticket-data">
+        </div>
+        <div class="edit-field">
+          <label class="edit-label">Código / Nº</label>
+          <input class="edit-input" type="text" id="new-ticket-codigo" placeholder="Código...">
+        </div>
+        <div class="edit-field">
+          <label class="edit-label">Status</label>
+          <select class="edit-input edit-select" id="new-ticket-status">
+            <option value="pendente">Pendente</option>
+            <option value="confirmado">Confirmado</option>
+          </select>
+        </div>
+      </div>
+      <button class="btn-primary" onclick="addTicket()">Adicionar ingresso</button>
+    </div>
+
+    <!-- Tickets list -->
+    <div id="ingressos-list"></div>
+
+  </div>
+
+  <!-- ==============================
+       CHECKLIST
+       ============================== -->
+  <div class="tab-panel" id="tab-checklist">
+
+    <div class="checklist-section">
+      <div class="checklist-title">Documentos e Burocracia</div>
+      <div id="checklist-docs"></div>
+    </div>
+
+    <div class="checklist-section">
+      <div class="checklist-title">Ingressos e Reservas</div>
+      <div id="checklist-ingressos"></div>
+    </div>
+
+    <div class="checklist-section">
+      <div class="checklist-title">Trens</div>
+      <div id="checklist-trens"></div>
+    </div>
+
+    <div class="checklist-section">
+      <div class="checklist-title">Hospedagem</div>
+      <div id="checklist-hospedagem"></div>
+    </div>
+
+  </div>
+
+</main>
+
+<script src="app.js" defer></script>
+</body>
+</html>
