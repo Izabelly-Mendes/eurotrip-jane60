@@ -7,18 +7,16 @@ const SUPABASE_URL  = 'https://hzwwsbgppdbihyxvdxrn.supabase.co';
 const SUPABASE_KEY  = 'sb_publishable_JsIhkEk0PkJuBFJfIr94IA_dSpN6HHN';
 
 /* ==========================================
-   SUPABASE CLIENT
+   SUPABASE — REST API direta (sem SDK)
+   Compatível com chaves sb_publishable_ e eyJ
    ========================================== */
-let sbClient = null;
-(function initSupabase() {
-  try {
-    if (window.supabase && SUPABASE_URL !== 'YOUR_SUPABASE_URL') {
-      sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-    }
-  } catch (e) {
-    console.warn('Supabase não inicializado:', e);
-  }
-})();
+const SB_HEADERS = {
+  'apikey': SUPABASE_KEY,
+  'Authorization': 'Bearer ' + SUPABASE_KEY,
+  'Content-Type': 'application/json',
+  'Prefer': 'return=minimal'
+};
+const SB_READY = SUPABASE_URL !== 'YOUR_SUPABASE_URL' && SUPABASE_KEY !== 'YOUR_SUPABASE_ANON_KEY';
 
 /* ==========================================
    SYNC INDICATOR
@@ -48,13 +46,15 @@ function localSet(key, value) {
 }
 
 async function sbUpsert(key, value) {
-  if (!sbClient) return;
+  if (!SB_READY) return;
   setSyncStatus('syncing');
   try {
-    const { error } = await sbClient
-      .from('eurotrip_data')
-      .upsert({ key, value }, { onConflict: 'key' });
-    if (error) throw error;
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/eurotrip_data`, {
+      method: 'POST',
+      headers: { ...SB_HEADERS, 'Prefer': 'resolution=merge-duplicates,return=minimal' },
+      body: JSON.stringify({ key, value })
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
     setSyncStatus('synced');
   } catch (e) {
     console.warn('Supabase upsert error:', e);
@@ -68,14 +68,15 @@ async function save(key, value) {
 }
 
 async function loadFromSupabase() {
-  if (!sbClient) return false;
+  if (!SB_READY) return false;
   setSyncStatus('syncing');
   try {
-    const { data, error } = await sbClient
-      .from('eurotrip_data')
-      .select('key, value');
-    if (error) throw error;
-    if (data && data.length > 0) {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/eurotrip_data?select=key,value`, {
+      headers: SB_HEADERS
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+    if (Array.isArray(data)) {
       data.forEach(row => {
         if (row.key && row.value !== null) {
           localStorage.setItem(PREFIX + row.key, row.value);
