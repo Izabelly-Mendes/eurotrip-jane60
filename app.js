@@ -3,8 +3,8 @@
    Substitua os valores abaixo com as
    credenciais do seu projeto Supabase.
    ========================================== */
-const SUPABASE_URL  = 'YOUR_SUPABASE_URL';       // Ex: https://xyzabcde.supabase.co
-const SUPABASE_KEY  = 'YOUR_SUPABASE_ANON_KEY';  // Ex: eyJhbGciOiJIUzI1NiIsInR5...
+const SUPABASE_URL  = 'https://hzwwsbgppdbihyxvdxrn.supabase.co';
+const SUPABASE_KEY  = 'sb_publishable_JsIhkEk0PkJuBFJfIr94IA_dSpN6HHN';
 
 /* ==========================================
    SUPABASE CLIENT
